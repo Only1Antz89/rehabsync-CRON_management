@@ -1,0 +1,14 @@
+# Railway config for the RehabSync cron runner.
+# This repo IS the service — deploy it directly (no Root Directory needed).
+# It wakes on schedule, pings the target endpoints, and exits — near-zero cost.
+
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "node run.mjs"
+# Every 15 minutes. Step delays are day/minute-granular, so this is plenty. Adjust if you like.
+cronSchedule = "*/15 * * * *"
+# A cron job must NOT auto-restart after it exits.
+restartPolicyType = "never"
+numReplicas = 1
