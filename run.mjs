@@ -47,5 +47,9 @@ for (const url of targets) {
   }
 }
 
-console.log(`[cron] done — ${targets.length - failures}/${targets.length} ok`);
-process.exit(failures > 0 ? 1 : 0);
+const succeeded = targets.length - failures;
+console.log(`[cron] done — ${succeeded}/${targets.length} ok`);
+// Exit non-zero only when EVERY target failed — a real "nothing worked" signal (e.g. a bad or
+// missing CRON_SECRET) worth surfacing as a failed run. A partial failure (some succeeded) is
+// tolerated so one app briefly redeploying doesn't mark the whole run "Crashed".
+process.exit(succeeded === 0 ? 1 : 0);
